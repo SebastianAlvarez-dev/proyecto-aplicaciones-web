@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<title>Becas ULEAM — Login (Demo)</title>
+<link href="css/estilos.css" rel="stylesheet"/>
+</head>
+<body>
+<body class="login-only">
+<div class="login-card card">
+<h1>Iniciar sesión</h1>
+<form id="loginForm">
+<label for="correo">Correo institucional</label>
+<input id="correoInstitucional" placeholder="usuario@uleam.edu.ec" required="" type="email"/>
+<label for="password">Contraseña</label>
+<input id="contrasena" placeholder="********" required="" type="password"/>
+<div class="buttons">
+<button class="btn btn-login" type="submit">Ingresar</button>
+<button class="btn btn-recover" onclick="window.location.href='recuperar.html'" type="button">Recuperar contraseña</button>
+</div>
+</form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.getElementById('loginForm');
+  const email = document.getElementById('correoInstitucional');
+  const pass = document.getElementById('contrasena');
+  
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const user = email.value.trim();
+    const pwd = pass.value.trim();
+    
+    if(user === 'admin@uleam.edu.ec' && pwd === '12345'){
+      localStorage.setItem('becasULEAM_user', JSON.stringify({correo: user}));
+      window.location.href = 'index.html';
+    } else {
+      alert('Credenciales incorrectas. Intente de nuevo.');
+    }
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const form = document.getElementById('loginForm') || document.querySelector('form');
+  const emailInput = document.getElementById('correoInstitucional') || document.querySelector('input[type="email"]');
+  const passInput = document.getElementById('contrasena') || document.querySelector('input[type="password"]');
+  if(!form || !emailInput || !passInput) return;
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const email = (emailInput.value || '').trim().toLowerCase();
+    const pwd = (passInput.value || '').trim();
+
+    if(email === 'admin@uleam.edu.ec' && pwd === '12345'){
+      localStorage.setItem('becasULEAM_user', JSON.stringify({ correo: email, rol: 'admin' }));
+      alert('🎉 Bienvenido, Admin 👋');
+      window.location.href = 'admin.html';
+      return;
+    }
+    if(email === 'demo@uleam.edu.ec' && pwd === '123'){
+      localStorage.setItem('becasULEAM_user', JSON.stringify({ correo: email, rol: 'estudiante' }));
+      alert('🎉 Bienvenido, ' + email + ' 👋');
+      window.location.href = 'index.html';
+      return;
+    }
+    if(email && pwd){
+      localStorage.setItem('becasULEAM_user', JSON.stringify({ correo: email, rol: 'estudiante' }));
+      alert('🎉 Bienvenido, ' + email + ' 👋');
+      window.location.href = 'index.html';
+      return;
+    }
+    alert('Credenciales inválidas.');
+  });
+});
+</script>
+
+</body>
+</html>

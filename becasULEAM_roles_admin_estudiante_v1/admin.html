@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Solicitudes de Beca</title>
+  <style>
+    body{font-family:Segoe UI, sans-serif;margin:0;background:#f7f7f7}
+    header{background:#2e8b57;color:#fff;padding:16px 20px;font-weight:800}
+    .wrap{max-width:1000px;margin:20px auto;background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.05)}
+    h1{margin:0 0 10px 0}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{padding:10px;border:1px solid #e5e7eb;text-align:left}
+    th{background:#f3f4f6}
+    .badge{padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700;display:inline-block}
+    .ok{background:#dcfce7;color:#166534}
+    .pending{background:#e5e7eb;color:#374151}
+    .reject{background:#fee2e2;color:#991b1b}
+    .rowact{display:flex;gap:8px}
+    button{border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700}
+    .approve{background:#16a34a;color:#fff}
+    .rejectbtn{background:#dc2626;color:#fff}
+    .logout{background:#111;color:#fff;float:right}
+    .topbar{display:flex;align-items:center;justify-content:space-between}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>Panel de Administración</div>
+      <button class="logout" id="logout">Cerrar sesión</button>
+    </div>
+  </header>
+  <div class="wrap">
+    <h1>Solicitudes de beca</h1>
+    <p>Aprueba o rechaza solicitudes. Los cambios se guardan en el navegador.</p>
+    <div id="grid"></div>
+  </div>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const user = JSON.parse(localStorage.getItem('becasULEAM_user') || 'null');
+    if(!user || user.rol !== 'admin'){
+      alert('Acceso restringido. Inicia sesión como admin.');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const grid = document.getElementById('grid');
+    let solicitudes = JSON.parse(localStorage.getItem('solicitudes') || '[]');
+
+    function badge(estado){
+      if(estado === 'Aprobada') return '<span class="badge ok">Aprobada</span>';
+      if(estado === 'Rechazada') return '<span class="badge reject">Rechazada</span>';
+      return '<span class="badge pending">Pendiente</span>';
+    }
+
+    function render(){
+      solicitudes = JSON.parse(localStorage.getItem('solicitudes') || '[]');
+      if(solicitudes.length === 0){
+        grid.innerHTML = '<p>No hay solicitudes aún.</p>';
+        return;
+      }
+      let html = '<table><thead><tr><th>Correo</th><th>Tipo</th><th>Fecha</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>';
+      solicitudes.forEach(s => {
+        html += `<tr>
+          <td>${s.correo || '-'}</td>
+          <td>${s.tipo || '-'}</td>
+          <td>${s.fecha || '-'}</td>
+          <td>${badge(s.estado || 'Pendiente')}</td>
+          <td>
+            <div class="rowact">
+              <button class="approve" data-id="${s.id}">Aprobar</button>
+              <button class="rejectbtn" data-id="${s.id}">Rechazar</button>
+            </div>
+          </td>
+        </tr>`;
+      });
+      html += '</tbody></table>';
+      grid.innerHTML = html;
+
+      grid.querySelectorAll('.approve').forEach(btn => {
+        btn.addEventListener('click', () => updateEstado(parseInt(btn.getAttribute('data-id')), 'Aprobada'));
+      });
+      grid.querySelectorAll('.rejectbtn').forEach(btn => {
+        btn.addEventListener('click', () => updateEstado(parseInt(btn.getAttribute('data-id')), 'Rechazada'));
+      });
+    }
+
+    function updateEstado(id, estado){
+      let data = JSON.parse(localStorage.getItem('solicitudes') || '[]');
+      data = data.map(s => s.id === id ? Object.assign({}, s, { estado }) : s);
+      localStorage.setItem('solicitudes', JSON.stringify(data));
+      render();
+    }
+
+    document.getElementById('logout').addEventListener('click', function(){
+      localStorage.removeItem('becasULEAM_user');
+      window.location.href = 'login.html';
+    });
+
+    render();
+  });
+  </script>
+</body>
+</html>
