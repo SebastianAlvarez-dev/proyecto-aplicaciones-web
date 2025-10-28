@@ -1,0 +1,22 @@
+DOM — index.html
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Becas ULEAM</title>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+
+  <body>
+    <header>
+      <nav>Inicio · Becas · Registro · Perfil</nav>
+    </header>
+
+    <main>
+      <section class="hero">Bienvenida + botones</section>
+      <section class="cards">Convocatorias + Solicitudes</section>
+    </main>
+
+    <footer>© ULEAM · Cerrar sesión</footer>
+  </body>
+</html>

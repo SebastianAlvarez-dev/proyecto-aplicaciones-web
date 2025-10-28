@@ -1,0 +1,27 @@
+DOM — ver-solicitudes.html
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Mis solicitudes · ULEAM</title>
+    <link rel="stylesheet" href="css/estilos.css">
+  </head>
+
+  <body>
+    <header>
+      <nav>Inicio · Becas · Registro · Mis solicitudes · Perfil</nav>
+    </header>
+
+    <main>
+      <h1>📄 Mis solicitudes de becas</h1>
+      <select id="filtroEstado">
+        <option>Todas</option>
+        <option>Aprobadas</option>
+        <option>Rechazadas</option>
+      </select>
+      <div id="tablaSolicitudes">Tabla dinámica de solicitudes</div>
+    </main>
+
+    <footer>© ULEAM · Cerrar sesión</footer>
+  </body>
+</html>
