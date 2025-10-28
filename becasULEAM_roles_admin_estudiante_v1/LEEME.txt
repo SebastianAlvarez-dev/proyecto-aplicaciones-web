@@ -1,6 +1,0 @@
-*las credenciales administardor son admin@uleam.edu.ec
-contraseña 12345
-
-
-*las credenciales para usuario estudiante son demo@uleam.edu.ec
-contrseña 123
