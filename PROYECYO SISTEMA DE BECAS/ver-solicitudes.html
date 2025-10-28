@@ -95,9 +95,6 @@ document.addEventListener('DOMContentLoaded', function(){
   let solicitudes = JSON.parse(localStorage.getItem('solicitudes') || '[]');
 
   let visibles = solicitudes;
-  if(user && user.rol !== 'admin'){
-    visibles = solicitudes.filter(s => s.correo === correo);
-  }
 
   if(visibles.length === 0){
     cont.innerHTML = '<p>No hay solicitudes para mostrar.</p>';
